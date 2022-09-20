@@ -17,6 +17,8 @@
 #include <string.h> // memset()
 #include <iostream>
 
+#include "constants.h"
+
 int main(int /*argc */, char** /*argv[] */) {
 
     // -----

@@ -13,7 +13,7 @@
 
 const uint8_t gDataPacketLength = 17;
 
-enum class NativeUnits
+enum class Units
 {
     GRAMS,
     KILOGRAMS,
@@ -34,3 +34,4 @@ enum class NativeUnits
     OZT, // https://en.wikipedia.org/wiki/Troy_weight
     TLH, // https://en.wikipedia.org/wiki/Tael - Hong Kong variant
 };
+
