@@ -112,9 +112,28 @@ class Measurement
             return Units::KILOGRAMS;
         }
 
-        else if () {
+        else if (measurementUnit == "ct") {
             ...
         }
+      
+        else if (measurementUnit == "T") {
+            ... 
+        }
+      
+        else if (measurementUnit == "TAR") {
+            ... 
+        }
+      
+        else if (measurementUnit == "dr") {
+          
+        }
+      
+        else if (measurementUnit == "PKT") {
+        
+        }
+      
+      
+ 
     }
 
 
