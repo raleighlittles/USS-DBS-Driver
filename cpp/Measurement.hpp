@@ -27,7 +27,17 @@ class Measurement
 
     }
 
-    std::string getMeasurement(Units measurementUnit) const {
+    std::string getMeasurement(Units requestedMeasurementUnit) const {
+      
+      // The simple case: The unit is requested in the same format its already stored in, so no conversion is needed
+      if (requestedMeasurementUnit == mNativeUnit) {
+
+        return mMeasurementStr;
+      }
+
+      if (requestedMeasurementUnit == Units::GRAMS) {
+        
+      }
 
     }
 
@@ -91,8 +101,11 @@ class Measurement
 
         }
 
-        // By now, full measurement should be parsed, just need to determine what the units are
+        // By now, full measurement should be parsed
+
         mMeasurementStr = measurement;
+        mNativeUnit = extractUnitName(measurementUnit);
+        mMeasurement = std::stod(measurement);
 
     }
 
@@ -145,11 +158,11 @@ class Measurement
         }
       
         else if (measurementUnit == "tlJ") {
-          return Units::TLJ;
+          return Units::TAEL_JAPAN;
         }
       
         else if (measurementUnit == "mo") {
-          return Units::MO;
+          return Units::MOMME;
         }
       
         else if (measurementUnit == "dwt") {
@@ -180,16 +193,9 @@ class Measurement
           return Units::PERCENT;
         }
       
-      
         else {
           throw std::invalid_argument("Unsupported unit type!");
         }
-      
-      
-      
-      
-      
- 
     }
 
 
