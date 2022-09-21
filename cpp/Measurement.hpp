@@ -100,7 +100,21 @@ class Measurement
     /// @param measurementUnit 
     /// @return 
     Units extractUnitName(const std::string measurementUnit) {
+        
+        // Page 5 of the manual contains the list of units. Units can be between either 1, 2, or 3 characters long -- no more.
+        // Supported unit descriptions are: g, kg, ct, T, TAR, dr, PKT, GN, TMR, gsm, tlJ, mo, dwt, oz, lb, tlT, ozt, tlH, %
 
+        if (measurementUnit == "g") {
+            return Units::GRAMS;
+        }
+
+        else if (measurementUnit == "kg") {
+            return Units::KILOGRAMS;
+        }
+
+        else if () {
+            ...
+        }
     }
 
 
