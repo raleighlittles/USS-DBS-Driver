@@ -113,24 +113,80 @@ class Measurement
         }
 
         else if (measurementUnit == "ct") {
-            ...
+            return Units::CARATS;
         }
       
         else if (measurementUnit == "T") {
-            ... 
+            return Units::TOLA; 
         }
       
         else if (measurementUnit == "TAR") {
-            ... 
+            return Units::TAR;
         }
       
         else if (measurementUnit == "dr") {
-          
+            return Units::DRAM;
         }
       
         else if (measurementUnit == "PKT") {
-        
+          return Units::PKT;
         }
+      
+        else if (measurementUnit == "GN") {
+          return Units::GRAIN;
+        }
+      
+        else if (measurementUnit == "TMR") {
+          return Units::TMR;
+        }
+      
+        else if (measurementUnit == "gsm") {
+          return Units::GSM;
+        }
+      
+        else if (measurementUnit == "tlJ") {
+          return Units::TLJ;
+        }
+      
+        else if (measurementUnit == "mo") {
+          return Units::MO;
+        }
+      
+        else if (measurementUnit == "dwt") {
+          return Units::PENNYWEIGHT;
+        }
+      
+        else if (measurementUnit == "oz") {
+          return Units::OUNCES;
+        }
+      
+        else if (measurementUnit == "lb") {
+          return Units::POUNDS;
+        }
+      
+        else if (measurementUnit == "tlT") {
+          return Units::TAEL_TAIWAN;
+        }
+      
+        else if (measurementUnit == "ozt") {
+          return Units::TROY_OUNCE;
+        }
+      
+        else if (measurementUnit == "tlH") {
+          return Units::TAEL_HONGKONG;
+        }
+      
+        else if (measurementUnit == "%") {
+          return Units::PERCENT;
+        }
+      
+      
+        else {
+          throw std::invalid_argument("Unsupported unit type!");
+        }
+      
+      
+      
       
       
  
