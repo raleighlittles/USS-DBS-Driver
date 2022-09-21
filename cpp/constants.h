@@ -25,14 +25,15 @@ enum class Units
     GRAIN, // https://en.wikipedia.org/wiki/Grain_(unit)
     TMR, // ???
     GSM, // https://en.wikipedia.org/wiki/Grammage
-    TLJ, // ???
-    MO, // ???
-    DWT, // https://en.wikipedia.org/wiki/Pennyweight
-    OZ,
-    LB,
-    TLT, // https://en.wikipedia.org/wiki/Tael - Tawain variant
-    OZT, // https://en.wikipedia.org/wiki/Troy_weight
-    TLH, // https://en.wikipedia.org/wiki/Tael - Hong Kong variant
+    TAEL_JAPAN, // https://en.wikipedia.org/wiki/Tael - The regular Chinese (and Japanese) version
+    MOMME, // https://en.wikipedia-.org/wiki/Pearl#Momme_weight
+    PENNYWEIGHT, // https://en.wikipedia.org/wiki/Pennyweight
+    OUNCES, // https://en.wikipedia.org/wiki/Ounce#International_avoirdupois_ounce
+    POUNDS, // https://en.wikipedia.org/wiki/Pound_(mass)
+    TAEL_TAIWAN, // https://en.wikipedia.org/wiki/Tael - Taiwan variant
+    TROY_OUNCE, // https://en.wikipedia.org/wiki/Troy_weight
+    TAEL_HONGKONG, // https://en.wikipedia.org/wiki/Tael - Hong Kong variant
+    PERCENT // ???
 };
 
 
