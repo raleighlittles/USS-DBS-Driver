@@ -16,6 +16,8 @@ const uint8_t gDataPacketLength = 17;
 enum class Units
 {
     GRAMS,
+    CENTIGRAMS,
+    MILLIGRAMS,
     KILOGRAMS,
     CARATS,
     TOLA,
