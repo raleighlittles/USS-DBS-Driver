@@ -35,9 +35,7 @@ class Measurement
         return mMeasurementStr;
       }
 
-      if (requestedMeasurementUnit == Units::GRAMS) {
-        
-      }
+      // TODO: Handle conversion of unit
 
     }
 
@@ -95,7 +93,8 @@ class Measurement
             // lowercase letters (0x61 97d to 0x7A 122d)
             // if it is, it's part of the 'unit' description
 
-            if (((currChar >= 0x41) && (currChar <= 0x5A)) || ((currChar >= 0x61) && (currChar <= 0x7A))) {
+            if (((currChar >= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_Z))) || ((currChar >= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_Z)))) {
+
                 measurementUnit.append(reinterpret_cast<const char*>(currChar));
             }
 
@@ -113,9 +112,6 @@ class Measurement
     /// @param measurementUnit 
     /// @return 
     Units extractUnitName(const std::string measurementUnit) {
-        
-        // Page 5 of the manual contains the list of units. Units can be between either 1, 2, or 3 characters long -- no more.
-        // Supported unit descriptions are: g, kg, ct, T, TAR, dr, PKT, GN, TMR, gsm, tlJ, mo, dwt, oz, lb, tlT, ozt, tlH, %
 
         if (measurementUnit == "g") {
             return Units::GRAMS;

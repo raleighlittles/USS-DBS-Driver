@@ -17,33 +17,40 @@ enum class Units
 {
     GRAMS,
     KILOGRAMS,
-    CARATS, // https://en.wikipedia.org/wiki/Carat_(mass)
-    TOLA, // https://en.wikipedia.org/wiki/Tola_(unit)
-    TAR, // ???
-    DRAM, // https://en.wikipedia.org/wiki/Dram_(unit)
-    PKT, // ???
-    GRAIN, // https://en.wikipedia.org/wiki/Grain_(unit)
-    TMR, // ???
-    GSM, // https://en.wikipedia.org/wiki/Grammage
-    TAEL_JAPAN, // https://en.wikipedia.org/wiki/Tael - The regular Chinese (and Japanese) version
-    MOMME, // https://en.wikipedia-.org/wiki/Pearl#Momme_weight
-    PENNYWEIGHT, // https://en.wikipedia.org/wiki/Pennyweight
-    OUNCES, // https://en.wikipedia.org/wiki/Ounce#International_avoirdupois_ounce
-    POUNDS, // https://en.wikipedia.org/wiki/Pound_(mass)
-    TAEL_TAIWAN, // https://en.wikipedia.org/wiki/Tael - Taiwan variant
-    TROY_OUNCE, // https://en.wikipedia.org/wiki/Troy_weight
-    TAEL_HONGKONG, // https://en.wikipedia.org/wiki/Tael - Hong Kong variant
-    PERCENT // ???
+    CARATS,
+    TOLA,
+    TAR,
+    DRAM,
+    PKT,
+    GRAIN,
+    TMR,
+    GSM,
+    TAEL_JAPAN,
+    MOMME,
+    PENNYWEIGHT,
+    OUNCES,
+    POUNDS,
+    TAEL_TAIWAN,
+    TROY_OUNCE, 
+    TAEL_HONGKONG, 
+    PERCENT
 };
 
 
-///     Important ASCII values used -- these show up in each message
+///     Important ASCII values used
+///
+///     Oct   Dec   Hex   Char
 ///     012   10    0A    LF  '\n' (new line)
 ///     015   13    0D    CR  '\r' (carriage ret)
 ///     040   32    20    SPACE
 ///     053   43    2B    +
 ///     055   45    2D    -
 ///     056   46    2E    .
+///     101   65    41    A
+///     132   90    5A    Z
+///     141   97    61    a
+///     172   122   7A    z
+
 enum class CommonASCIIValues : uint8_t
 {
     NEWLINE = 0x0A,
@@ -51,5 +58,9 @@ enum class CommonASCIIValues : uint8_t
     SPACE = 0x20,
     PLUS_SIGN = 0x2B,
     MINUS_SIGN = 0x2D,
-    PERIOD = 0x2E
+    PERIOD = 0x2E,
+    UPPER_CASE_A = 0x41,
+    UPPER_CASE_Z = 0x5A,
+    LOWER_CASE_A = 0x61,
+    LOWER_CASE_Z = 0x7A
 };
