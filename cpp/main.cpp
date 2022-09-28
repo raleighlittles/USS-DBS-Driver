@@ -18,6 +18,7 @@
 #include <iostream>
 
 #include "constants.h"
+#include "Measurement.hpp"
 
 int main(int /*argc */, char** /*argv[] */) {
 
@@ -46,6 +47,9 @@ int main(int /*argc */, char** /*argv[] */) {
     // Wait for the serial port to open -- this might not be needed
     usleep(100000);
 
+
+    // TODO: Use getopt to parse CLI options
+
     // -----
     // Start reading from serial port. Make sure you've read the documentation
     // -----
@@ -64,8 +68,9 @@ int main(int /*argc */, char** /*argv[] */) {
 
         if (bytesRead > 0) {
 
-        }
+            auto meas = Measurement(readBuffer);
 
+        }
     }
 
 
