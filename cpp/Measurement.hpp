@@ -15,6 +15,7 @@
 #include <stdexcept>
 
 #include "constants.h"
+#include "conversions.h"
 
 
 class Measurement
@@ -35,8 +36,10 @@ class Measurement
         return mMeasurementStr;
       }
 
-      // TODO: Handle conversion of unit
-
+      else {
+        
+        return std::to_string(Converter::convertMeasurement(mMeasurement, mNativeUnit, requestedMeasurementUnit));
+      }
     }
 
   private:
@@ -88,9 +91,8 @@ class Measurement
                 measurement.append(reinterpret_cast<const char*>(currChar));
             }
 
-            // Check if current character is in the range of:
-            // uppercase letters (0x41 65d to 0x5A 90d in ASCII table)
-            // lowercase letters (0x61 97d to 0x7A 122d)
+            // Check if current character is in range of:
+            // uppercase letters in ASCII or lowercase letters,
             // if it is, it's part of the 'unit' description
 
             if (((currChar >= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_Z))) || ((currChar >= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_Z)))) {
