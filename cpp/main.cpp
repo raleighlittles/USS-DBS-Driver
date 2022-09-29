@@ -131,6 +131,14 @@ int main(int argc, char* argv[]) {
             
             const std::string printableMeasurement = measurementObj.getMeasurement(desiredMeasurementUnit);
 
+            const std::string ineligibleMeasurement = "0.0";
+
+            // Make sure the measurement isn't 0 (yes, this actually happens!)
+            if (!printableMeasurement.compare(0, ineligibleMeasurement.size(), ineligibleMeasurement)) {
+                std::cerr << "[WARNING] Measurement of zero was recorded, discarding" << std::endl;
+                continue;
+            }
+
             if (logToFile) {
 
             }
@@ -140,7 +148,6 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-
 
     return 0;
 }
