@@ -17,6 +17,7 @@
 #include <string.h>
 #include <iostream>
 #include <getopt.h>
+#include <ctime>
 
 #include "constants.h"
 #include "Measurement.hpp"
@@ -107,7 +108,18 @@ int main(int argc, char* argv[]) {
                 return -1;
         }
     }
-
+    
+    if (logtoFile) {
+     // Open CSV file, initialize columns
+      std::ifstream csvFile;
+      csvFile.open(outputFileName, std::ios::out);
+        
+      if (!csvFile) {
+       std::cerr << "Error opening CSV file" << std::endl;   
+      }
+        
+       csvFile << "'Measurement Time' , 'Measurement Value'" << std::endl;
+    } 
 
     // -----
     // Start reading from serial port. Make sure you've read the documentation
@@ -140,7 +152,7 @@ int main(int argc, char* argv[]) {
             }
 
             if (logToFile) {
-
+                
             }
 
             if (useKeyboard) {
