@@ -15,20 +15,25 @@
 #include <stdexcept>
 
 #include "constants.h"
-#include "conversions.h"
+#include "converter.h"
 
+#pragma once
 
 class Measurement
 {
 
   public:
-    explicit Measurement(const std::array<uint8_t, gDataPacketLength> rawMeasurementBytes);
+    explicit Measurement(const std::array<std::byte, gDataPacketLength> rawMeasurementBytes)
+            : mRawMeasurement(rawMeasurementBytes) { }
 
     bool checkSign(void) const {
-
+      // TODO: Not used?
+      return true;
     }
 
-    std::string getMeasurement(Units requestedMeasurementUnit) const {
+    std::string getMeasurement(const std::string desiredUnitName) const {
+
+      const Units requestedMeasurementUnit = extractUnitName(desiredUnitName);
       
       // The simple case: The unit is requested in the same format its already stored in, so no conversion is needed
       if (requestedMeasurementUnit == mNativeUnit) {
@@ -54,13 +59,13 @@ class Measurement
         // To start, conduct basic sanity checks -- verifying the message starts correctly (with a plus or minus sign),
         // and ends correctly (with a carriage return and a newline)
 
-        uint8_t sign = mRawMeasurement.at(0);
+        std::byte sign = mRawMeasurement.at(0);
 
-        if (sign == static_cast<uint8_t>(CommonASCIIValues::PLUS_SIGN)) {
+        if (sign == static_cast<std::byte>(CommonASCIIValues::PLUS_SIGN)) {
             mSign = true;
         }
 
-        else if (sign == static_cast<uint8_t>(CommonASCIIValues::MINUS_SIGN)) {
+        else if (sign == static_cast<std::byte>(CommonASCIIValues::MINUS_SIGN)) {
             mSign = false;
         }
 
@@ -69,8 +74,8 @@ class Measurement
             throw std::invalid_argument("Unable to determine sign (+/-) of measurement, data does not match expected format");
         }
 
-        if ((mRawMeasurement.at(mRawMeasurement.size() - 2) != static_cast<uint8_t>(CommonASCIIValues::CARRIAGE_RET)) || 
-            (mRawMeasurement.back() != static_cast<uint8_t>(CommonASCIIValues::NEWLINE))) {
+        if ((mRawMeasurement.at(mRawMeasurement.size() - 2) != static_cast<std::byte>(CommonASCIIValues::CARRIAGE_RET)) || 
+            (mRawMeasurement.back() != static_cast<std::byte>(CommonASCIIValues::NEWLINE))) {
 
             throw std::invalid_argument("Message was supposed to end with '\r\n' but didn't, check that message is correctly formatted!");
         }
@@ -87,7 +92,7 @@ class Measurement
 
             auto currChar = mRawMeasurement.at(i);
 
-            if (currChar != static_cast<uint8_t>(CommonASCIIValues::SPACE)) { // Skip spaces
+            if (currChar != static_cast<std::byte>(CommonASCIIValues::SPACE)) { // Skip spaces
                 measurement.append(reinterpret_cast<const char*>(currChar));
             }
 
@@ -95,7 +100,7 @@ class Measurement
             // uppercase letters in ASCII or lowercase letters,
             // if it is, it's part of the 'unit' description
 
-            if (((currChar >= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_Z))) || ((currChar >= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_Z)))) {
+            if (((currChar >= static_cast<std::byte>(CommonASCIIValues::UPPER_CASE_A)) && (currChar <= static_cast<std::byte>(CommonASCIIValues::UPPER_CASE_Z))) || ((currChar >= static_cast<std::byte>(CommonASCIIValues::LOWER_CASE_A)) && (currChar <= static_cast<std::byte>(CommonASCIIValues::LOWER_CASE_Z)))) {
 
                 measurementUnit.append(reinterpret_cast<const char*>(currChar));
             }
@@ -113,7 +118,7 @@ class Measurement
     /// @brief Converts a unit string into an enum
     /// @param measurementUnit 
     /// @return 
-    Units extractUnitName(const std::string measurementUnit) {
+    Units extractUnitName(const std::string measurementUnit) const {
 
         if (measurementUnit == "g") {
             return Units::GRAMS;
@@ -204,7 +209,7 @@ class Measurement
     double mMeasurement;
     std::string mMeasurementStr;
 
-    std::array<uint8_t, gDataPacketLength> mRawMeasurement;
+    std::array<std::byte, gDataPacketLength> mRawMeasurement;
 
     Units mNativeUnit;
 };

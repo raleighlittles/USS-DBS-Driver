@@ -10,10 +10,11 @@
  */
 
 
+
 #include "converter.h"
 #include "constants.h"
 
-const std::map<std::pair<Units, Units>, double> mConversionTable =
+const std::map<std::pair<Units, Units>, double> Converter::mConversionTable =
 {
             { std::make_pair<Units, Units>(Units::MILLIGRAMS, Units::GRAMS), 0.001 },
             { std::make_pair<Units, Units>(Units::CENTIGRAMS, Units::GRAMS), 0.01 },

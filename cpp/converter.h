@@ -14,8 +14,11 @@
 #include <cstdint>
 #include <map>
 #include <utility>
+#include <stdexcept>
 
 #include "constants.h"
+
+#pragma once
 
 class Converter
 {
@@ -27,7 +30,7 @@ class Converter
             const auto it = mConversionTable.find({sourceUnit, destinationUnit});
 
             if (it == mConversionTable.end()) {
-                // throw exception
+                throw std::invalid_argument("Unsupported unit type");
             }
 
             else {
