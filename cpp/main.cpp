@@ -18,6 +18,7 @@
 #include <iostream>
 #include <fstream>
 #include <getopt.h>
+#include <chrono>
 #include <ctime>
 
 #include "constants.h"
@@ -65,7 +66,7 @@ int main(int argc, char* argv[]) {
                 std::cout << "Usage: " << argv[0] << std::endl;
                 std::cout << "-h \t \t \t Shows this help text" << std::endl;
                 std::cout << "-u [unit name] \t \t Measurements will be converted to the specified unit. (See manual for supported unit descriptions)" << std::endl;
-                std::cout << "-o [filename].csv \t Logs measurements to the specified CSV file" << std::endl;
+                std::cout << "-o [filename] \t Logs measurements to the specified CSV file" << std::endl;
                 std::cout << "-k \t \t \t Prints measurements from the keyboard directly" << std::endl;
                 return 0;
 
@@ -81,8 +82,9 @@ int main(int argc, char* argv[]) {
                 break;
 
             case 'o':
-                std::cout << "[DEBUG] User requested output to " << optarg << ".csv " << std::endl;
                 outputFileName = std::string(optarg);
+                std::cout << "[DEBUG] User requested output to " << outputFileName << std::endl;
+                logToFile = true;
                 break;
 
             default:
@@ -96,7 +98,7 @@ int main(int argc, char* argv[]) {
       
       csvFile.open(outputFileName, std::ios::out);
         
-      if (!csvFile) {
+      if (!csvFile.is_open()) {
        std::cerr << "Error opening CSV file" << std::endl;
        return 2;
       }
@@ -120,6 +122,14 @@ int main(int argc, char* argv[]) {
 
     terminal_options.c_cflag = B9600 | CS8 | CREAD;
 
+    if ((tcsetattr(serialPortFileDescriptor, TCSANOW, &terminal_options)) != 0)
+    {
+
+        std::cerr << "Failed to set termios settings";
+        close(serialPortFileDescriptor);
+        return 1;
+    }
+
     if ((tcflush(serialPortFileDescriptor, TCIOFLUSH)) != 0) {
 
         std::cerr << "Failed to flush termios settings. Check that scale is connected";
@@ -132,19 +142,26 @@ int main(int argc, char* argv[]) {
 
 
     // Start reading from serial port. Make sure you've read the documentation to understand this section
-    std::array<std::byte, gDataPacketLength> readBuffer;
+    std::array<uint8_t, gDataPacketLength> readBuffer;
 
     while (true) {
         
         ssize_t bytesRead = read(serialPortFileDescriptor, readBuffer.begin(), gDataPacketLength);
 
+        //std::cout << "[DEBUG] Read " << bytesRead << " bytes " << std::endl;
+
         if (bytesRead < 0) {
 
-            std::cerr << "Error reading from serial port" << std::endl;
+            std::cerr << "Error reading from serial port. Errno= " << errno << std::endl;
             return 2;
         }
 
-        if (bytesRead > 0) {
+        else if (bytesRead == 0) {
+            usleep(10_000);
+            continue;
+        }
+
+        else if (bytesRead > 1) {
 
             auto measurementObj = Measurement(readBuffer);
             
@@ -163,10 +180,11 @@ int main(int argc, char* argv[]) {
             if (logToFile) {
                 
                 // Get current time
-                std::time_t t = std::time(0);
-                std::tm* now = std::localtime(&t);
-                const std::string currentTimestamp = (now->tm_year + 1900) + (now->tm_mon + 1) + (now->tm_mday) +
-                                                     "_" + (now->tm_hour) + (now->tm_min) + (now->tm_sec);
+                    auto start = std::chrono::system_clock::now();
+                    auto legacyStart = std::chrono::system_clock::to_time_t(start);
+                    const std::string currentTimestamp = std::ctime(&legacyStart);
+
+                std::cout << "[DEBUG] Current Time = " << currentTimestamp << std::endl;
 
                 csvFile << printableMeasurement << " , " << currentTimestamp << std::endl;
             }
@@ -175,6 +193,9 @@ int main(int argc, char* argv[]) {
                 continue;
             }
         }
+
+        std::cout << ".";
+        usleep(10_000);
     }
 
     return 0;
