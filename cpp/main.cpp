@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Wait for the serial port to open (Why is this needed?)
-    usleep(100000);
+    usleep(10000);
 
 
     // Start reading from serial port. Make sure you've read the documentation to understand this section
@@ -157,8 +157,7 @@ int main(int argc, char* argv[]) {
         }
 
         else if (bytesRead == 0) {
-            usleep(10_000);
-            continue;
+            usleep(100000);
         }
 
         else if (bytesRead > 1) {
@@ -194,8 +193,7 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        std::cout << ".";
-        usleep(10_000);
+        usleep(10000);
     }
 
     return 0;
