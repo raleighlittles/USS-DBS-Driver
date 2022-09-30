@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <iostream>
+#include <fstream>
 #include <getopt.h>
 #include <ctime>
 
@@ -24,31 +25,9 @@
 
 int main(int argc, char* argv[]) {
 
-    // -----
-    // Setup and initialize serial port
-    // -----
-
-    const std::string serialPortFile = "/dev/ttyUSB0";
-    const int serialPortFileDescriptor = open(serialPortFile.c_str(), O_RDONLY | O_NOCTTY | O_NONBLOCK);
-
-    if (serialPortFileDescriptor == -1) {
-
-        std::cerr << "Failed to open serial port file: " << serialPortFile << std::endl;
-    }
-
-    struct termios terminal_options;
-    memset(&terminal_options, 0, sizeof(struct termios));
-
-    if ((tcflush(serialPortFileDescriptor, TCIOFLUSH)) != 0) {
-
-        std::cerr << "Failed to flush termios settings";
-        close(serialPortFileDescriptor);
-        return 1;
-    }
-
-    // Wait for the serial port to open -- this might not be needed
-    usleep(100000);
-
+    /// -------------------------- ///
+    /// Setup parsing of CLI args 
+    
 
     struct option long_opt[] = 
     {
@@ -60,9 +39,12 @@ int main(int argc, char* argv[]) {
     };
 
 
+    // For logging to CSV file
     bool logToFile = false;
     std::string outputFileName;
+    std::ofstream csvFile;
 
+    // For making measurement show up as keyboard input
     bool useKeyboard = false;
 
     std::string desiredMeasurementUnit;
@@ -81,16 +63,16 @@ int main(int argc, char* argv[]) {
 
             case 'h':
                 std::cout << "Usage: " << argv[0] << std::endl;
-                std::cout << "-h \t \t Shows this help text" << std::endl;
+                std::cout << "-h \t \t \t Shows this help text" << std::endl;
                 std::cout << "-u [unit name] \t \t Measurements will be converted to the specified unit. (See manual for supported unit descriptions)" << std::endl;
-                std::cout << "-o [filename].csv \t \t Logs measurements to the specified CSV file" << std::endl;
-                std::cout << "-k \t \t Prints measurements from the keyboard directly" << std::endl;
+                std::cout << "-o [filename].csv \t Logs measurements to the specified CSV file" << std::endl;
+                std::cout << "-k \t \t \t Prints measurements from the keyboard directly" << std::endl;
                 return 0;
 
             case 'u':
                 // `optarg` is a global variable used in the getopt library
-                std::cout << "[DEBUG] User specified unit: " << optarg << std::endl;
                 desiredMeasurementUnit = std::string(optarg);
+                std::cout << "[DEBUG] User specified unit: " << desiredMeasurementUnit << std::endl;
                 break;
 
             case 'k':
@@ -109,22 +91,47 @@ int main(int argc, char* argv[]) {
         }
     }
     
-    if (logtoFile) {
+    if (logToFile) {
      // Open CSV file, initialize columns
-      std::ifstream csvFile;
+      
       csvFile.open(outputFileName, std::ios::out);
         
       if (!csvFile) {
-       std::cerr << "Error opening CSV file" << std::endl;   
+       std::cerr << "Error opening CSV file" << std::endl;
+       return 2;
       }
         
        csvFile << "'Measurement Time' , 'Measurement Value'" << std::endl;
-    } 
+    }
 
-    // -----
-    // Start reading from serial port. Make sure you've read the documentation
-    // -----
+    /// -------------------------- ///
+    /// Setup serial port
 
+    const std::string serialPortFile = "/dev/ttyUSB0";
+    const int serialPortFileDescriptor = open(serialPortFile.c_str(), O_RDONLY | O_NOCTTY | O_NONBLOCK);
+
+    if (serialPortFileDescriptor == -1) {
+
+        std::cerr << "Failed to open serial port file: " << serialPortFile << std::endl;
+    }
+
+    struct termios terminal_options;
+    memset(&terminal_options, 0, sizeof(struct termios));
+
+    terminal_options.c_cflag = B9600 | CS8 | CREAD;
+
+    if ((tcflush(serialPortFileDescriptor, TCIOFLUSH)) != 0) {
+
+        std::cerr << "Failed to flush termios settings. Check that scale is connected";
+        close(serialPortFileDescriptor);
+        return 1;
+    }
+
+    // Wait for the serial port to open (Why is this needed?)
+    usleep(100000);
+
+
+    // Start reading from serial port. Make sure you've read the documentation to understand this section
     std::array<std::byte, gDataPacketLength> readBuffer;
 
     while (true) {
@@ -143,6 +150,8 @@ int main(int argc, char* argv[]) {
             
             const std::string printableMeasurement = measurementObj.getMeasurement(desiredMeasurementUnit);
 
+            std::cout << "[DEBUG] Measurement received: " << printableMeasurement << std::endl;
+
             const std::string ineligibleMeasurement = "0.0";
 
             // Make sure the measurement isn't 0 (yes, this actually happens!)
@@ -153,10 +162,17 @@ int main(int argc, char* argv[]) {
 
             if (logToFile) {
                 
+                // Get current time
+                std::time_t t = std::time(0);
+                std::tm* now = std::localtime(&t);
+                const std::string currentTimestamp = (now->tm_year + 1900) + (now->tm_mon + 1) + (now->tm_mday) +
+                                                     "_" + (now->tm_hour) + (now->tm_min) + (now->tm_sec);
+
+                csvFile << printableMeasurement << " , " << currentTimestamp << std::endl;
             }
 
             if (useKeyboard) {
-
+                continue;
             }
         }
     }

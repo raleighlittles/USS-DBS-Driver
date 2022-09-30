@@ -30,7 +30,7 @@ class Converter
             const auto it = mConversionTable.find({sourceUnit, destinationUnit});
 
             if (it == mConversionTable.end()) {
-                throw std::invalid_argument("Unsupported unit type");
+                throw std::invalid_argument("Can't convert measurement -- unsupported unit type");
             }
 
             else {

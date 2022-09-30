@@ -31,13 +31,14 @@ class Measurement
       return true;
     }
 
-    std::string getMeasurement(const std::string desiredUnitName) const {
+    std::string getMeasurement(const std::string desiredUnitName) {
+
+      decodeRawMeasurement();
 
       const Units requestedMeasurementUnit = extractUnitName(desiredUnitName);
       
       // The simple case: The unit is requested in the same format its already stored in, so no conversion is needed
       if (requestedMeasurementUnit == mNativeUnit) {
-
         return mMeasurementStr;
       }
 
@@ -49,8 +50,7 @@ class Measurement
 
   private:
 
-
-    /// @brief Decodes the list of raw bytes into a measurement
+    /// @brief Main function of this class: decodes the series of raw bytes into a measurement
     ///     Side-effect: stores the measurement and native unit in the class
     ///     Read the whole documentation to understand how the data is stored.
     /// @return 
@@ -108,6 +108,7 @@ class Measurement
         }
 
         // By now, full measurement should be parsed
+
 
         mMeasurementStr = measurement;
         mNativeUnit = extractUnitName(measurementUnit);
@@ -197,7 +198,7 @@ class Measurement
         }
       
         else {
-          throw std::invalid_argument("Unsupported unit type!");
+          throw std::invalid_argument("Unsupported unit type: " + measurementUnit);
         }
     }
 
