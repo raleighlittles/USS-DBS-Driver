@@ -23,6 +23,7 @@
 
 #include "constants.h"
 #include "Measurement.hpp"
+#include "keyboard.h"
 
 int main(int argc, char* argv[]) {
 
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
 
     // For making measurement show up as keyboard input
     bool useKeyboard = false;
+    Keyboard keyboard;
 
     std::string desiredMeasurementUnit;
 
@@ -103,7 +105,7 @@ int main(int argc, char* argv[]) {
        return 2;
       }
         
-       csvFile << "'Measurement Time' , 'Measurement Value'" << std::endl;
+       csvFile << "'Measurement Time' , 'Measurement Value (Units = " << desiredMeasurementUnit << ")" << std::endl;
     }
 
     /// -------------------------- ///
@@ -189,7 +191,7 @@ int main(int argc, char* argv[]) {
             }
 
             if (useKeyboard) {
-                continue;
+                keyboard.generateKeyPressEvent(printableMeasurement);
             }
         }
 

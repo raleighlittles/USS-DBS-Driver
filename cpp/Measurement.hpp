@@ -93,7 +93,9 @@ class Measurement
 
             uint8_t currChar = mRawMeasurement[i];
 
-            if (currChar != static_cast<uint8_t>(CommonASCIIValues::SPACE) && (currChar != 0)) { // Skip spaces, don't want them included in the measurement
+            //if (currChar != static_cast<uint8_t>(CommonASCIIValues::SPACE) && (currChar != 0) &&
+            if (((currChar >= static_cast<uint8_t>(CommonASCIIValues::DIGIT_ZERO)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::DIGIT_NINE))) || (currChar == static_cast<uint8_t>(CommonASCIIValues::PERIOD))) {
+            // Extract only the numeric part of the measurement, e.g. "+1.23g" becomes "1.23" -- the units get parsed separately below
 
               // Don't use the `currChar` value, it'll segfault. Remember you need the pointer to the char, not the char itself!
               measurement.append(std::string(reinterpret_cast<const char*>(mRawMeasurement.data() + i), 1));
@@ -104,7 +106,10 @@ class Measurement
             // uppercase letters in ASCII or lowercase letters,
             // if it is, it's part of the 'unit' description
 
-            if (((currChar >= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_Z))) || ((currChar >= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_A)) && (currChar <= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_Z)))) {
+            if (((currChar >= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_A)) && 
+            (currChar <= static_cast<uint8_t>(CommonASCIIValues::UPPER_CASE_Z))) || 
+            ((currChar >= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_A)) && 
+            (currChar <= static_cast<uint8_t>(CommonASCIIValues::LOWER_CASE_Z)))) {
 
               measurementUnit.append(std::string(reinterpret_cast<const char*>(mRawMeasurement.data() + i), 1));
             }

@@ -48,8 +48,10 @@ enum class Units
 ///     015   13    0D    CR  '\r' (carriage ret)
 ///     040   32    20    SPACE
 ///     053   43    2B    +
-///     055   45    2D    -
-///     056   46    2E    .
+///     055   45    2D    - (dash)
+///     056   46    2E    . (period)
+///     060   48    30    0
+///     071   57    39    9
 ///     101   65    41    A
 ///     132   90    5A    Z
 ///     141   97    61    a
@@ -63,8 +65,11 @@ enum class CommonASCIIValues : uint8_t
     PLUS_SIGN = 0x2B,
     MINUS_SIGN = 0x2D,
     PERIOD = 0x2E,
+    DIGIT_ZERO = 0x30,
+    DIGIT_NINE = 0x39,
     UPPER_CASE_A = 0x41,
     UPPER_CASE_Z = 0x5A,
     LOWER_CASE_A = 0x61,
     LOWER_CASE_Z = 0x7A
+ 
 };
