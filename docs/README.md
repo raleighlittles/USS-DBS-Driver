@@ -1,6 +1,7 @@
 # Model info
 
 Model: USS-DBS28-30
+
 Series No: USS-DBS2203176
 
 # Terminal settings
