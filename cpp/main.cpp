@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
             return 2;
         }
 
-        csvFile << "'Measurement Time' , 'Measurement Value (Units = " << desiredMeasurementUnit << ")" << std::endl;
+        csvFile << "'Measurement Time' , 'Measurement Value (Units = " << desiredMeasurementUnit << ")'" << std::endl;
     }
 
     /// -------------------------- ///
