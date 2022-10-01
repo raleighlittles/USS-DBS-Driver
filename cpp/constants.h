@@ -1,12 +1,12 @@
 /**
  * @file constants.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author Raleigh Littles III (raleighlittles@gmail.com)
+ * @brief Contains several enums and constants used throughout the program.
  * @version 0.1
  * @date 2022-09-18
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #include <cstdint>
@@ -35,11 +35,10 @@ enum class Units
     OUNCES,
     POUNDS,
     TAEL_TAIWAN,
-    TROY_OUNCE, 
-    TAEL_HONGKONG, 
+    TROY_OUNCE,
+    TAEL_HONGKONG,
     PERCENT
 };
-
 
 ///     Important ASCII values used
 ///
@@ -56,7 +55,6 @@ enum class Units
 ///     132   90    5A    Z
 ///     141   97    61    a
 ///     172   122   7A    z
-
 enum class CommonASCIIValues : uint8_t
 {
     NEWLINE = 0x0A,
@@ -71,5 +69,4 @@ enum class CommonASCIIValues : uint8_t
     UPPER_CASE_Z = 0x5A,
     LOWER_CASE_A = 0x61,
     LOWER_CASE_Z = 0x7A
- 
 };
