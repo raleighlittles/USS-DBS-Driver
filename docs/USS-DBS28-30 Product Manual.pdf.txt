@@ -1,0 +1,19 @@
+Title:           
+Creator:         Adobe Acrobat 22.2
+Producer:        Adobe Acrobat Pro DC (64-bit) 22 Paper Capture Plug-in
+CreationDate:    Tue Sep 20 13:21:22 2022 MST
+ModDate:         Tue Sep 20 13:21:22 2022 MST
+Custom Metadata: no
+Metadata Stream: yes
+Tagged:          no
+UserProperties:  no
+Suspects:        no
+Form:            none
+JavaScript:      no
+Pages:           4
+Encrypted:       no
+Page size:       832.56 x 577.32 pts
+Page rot:        0
+File size:       9029314 bytes
+Optimized:       yes
+PDF version:     1.6
